@@ -1,19 +1,19 @@
-import { join } from "path";
+// import { join } from "path";
 import {
   createBot,
   createProvider,
   createFlow,
   addKeyword,
-  utils,
 } from "@builderbot/bot";
-import { MemoryDB as Database } from "@builderbot/bot";
+import { MemoryDB as Database, EVENTS } from "@builderbot/bot";
 import { BaileysProvider as Provider } from "@builderbot/provider-baileys";
-import { registerFlow } from "./flows/SalesRegister";
+import { createOrderFlow, registerFlow } from "./flows/SalesRegister";
 import { chat } from "./scripts/gemini";
+import { welcomeFlow } from "./flows/Welcome";
 
 const PORT = process.env.PORT ?? 3008;
 
-const discordFlow = addKeyword<Provider, Database>("doc").addAnswer(
+/* const discordFlow = addKeyword<Provider, Database>("doc").addAnswer(
   [
     "You can see the documentation here",
     "📄 https://builderbot.app/docs \n",
@@ -27,23 +27,26 @@ const discordFlow = addKeyword<Provider, Database>("doc").addAnswer(
     await flowDynamic("Thanks!");
     return;
   }
-);
+); */
 
-export const welcomeFlow = addKeyword<Provider, Database>([
-  "hi",
-  "hello",
-  "hola",
-])
-  .addAnswer(`🙌 Hello welcome to this *Chatbot*`)
-  .addAnswer(
-    "En que puedo ayudarte hoy?",
-    { delay: 800, capture: true },
-    async (ctx, { flowDynamic }) => {
-      const resp = chat(ctx.body);
-      flowDynamic(await resp);
-      return;
-    }
+export const mainFlow = addKeyword<Provider, Database>(
+  EVENTS.WELCOME
+).addAction(async (ctx, { flowDynamic, gotoFlow }) => {
+  const bodyText: string = ctx.body.toLowerCase();
+  const keywords: string[] = ["hola", "buenas"];
+
+  const containsKeyword: boolean = keywords.some((keyword) =>
+    bodyText.includes(keyword)
   );
+
+  if (containsKeyword) {
+    return gotoFlow(welcomeFlow);
+  }
+
+  const resp = chat(ctx.body);
+  flowDynamic(await resp);
+  console.log(ctx.body);
+});
 
 // const registerFlow = addKeyword<Provider, Database>(
 //   utils.setEvent("REGISTER_FLOW")
@@ -66,7 +69,7 @@ export const welcomeFlow = addKeyword<Provider, Database>([
 //     );
 //   });
 
-const fullSamplesFlow = addKeyword<Provider, Database>([
+/* const fullSamplesFlow = addKeyword<Provider, Database>([
   "samples",
   utils.setEvent("SAMPLES"),
 ])
@@ -85,9 +88,14 @@ const fullSamplesFlow = addKeyword<Provider, Database>([
     media:
       "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
   });
-
+ */
 const main = async () => {
-  const adapterFlow = createFlow([welcomeFlow, fullSamplesFlow, registerFlow]);
+  const adapterFlow = createFlow([
+    welcomeFlow,
+    mainFlow,
+    registerFlow,
+    createOrderFlow,
+  ]);
 
   const adapterProvider = createProvider(Provider);
   const adapterDB = new Database();
