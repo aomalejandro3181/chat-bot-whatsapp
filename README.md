@@ -1,44 +1,63 @@
-<p align="center">
-  <a href="https://builderbot.vercel.app/">
-    <picture>
-      <img src="https://builderbot.vercel.app/assets/thumbnail-vector.png" height="80">
-    </picture>
-    <h2 align="center">BuilderBot</h2>
-  </a>
-</p>
+
+# Chatbot de Ventas para WhatsApp
+
+Este proyecto implementa un chatbot de ventas para WhatsApp utilizando Builderbot, Baileys y Google Gemini.
 
 
 
-<p align="center">
-  <a aria-label="NPM version" href="https://www.npmjs.com/package/@builderbot/bot">
-    <img alt="" src="https://img.shields.io/npm/v/@builderbot/bot?color=%2300c200&label=%40bot-whatsapp">
-  </a>
-  <a aria-label="Join the community on GitHub" href="https://link.codigoencasa.com/DISCORD">
-    <img alt="" src="https://img.shields.io/discord/915193197645402142?logo=discord">
-  </a>
-</p>
+
+## Funcionalidades
+
+* Saluda a los usuarios y ofrece ayuda.
+* Guía a los usuarios a través del proceso de registro de un pedido.
+* Registra los detalles del pedido.
+* Integración con Google Gemini para respuestas más naturales y conversacionales.
 
 
-## Getting Started
+## Run Locally
 
-With this library, you can build automated conversation flows agnostic to the WhatsApp provider, set up automated responses for frequently asked questions, receive and respond to messages automatically, and track interactions with customers. Additionally, you can easily set up triggers to expand functionalities limitlessly.
+Clone the project
 
-```
-npm create builderbot@latest
+```bash
+  git clone https://github.com/tu-usuario/chat-bot-whatsapp.git
 ```
 
+Go to the project directory
 
-## Documentation
+```bash
+  cd chat-bot-whatsapp
+```
 
-Visit [builderbot](https://builderbot.vercel.app/) to view the full documentation.
+Install dependencies
+
+```bash
+  npm install
+```
+
+Start the server
+
+```bash
+  npm run dev
+```
 
 
-## Official Course
+## Variables de entorno
 
-If you want to discover all the functions and features offered by the library you can take the course.
-[View Course](https://app.codigoencasa.com/courses/builderbot?refCode=LEIFER)
+To run this project, you will need to add the following environment variables to your .env file
+
+`PORT=3008`
+`GEMINI_API_KEY=tu_clave_api_de_gemini`
 
 
-## Contact Us
-- [💻 Discord](https://link.codigoencasa.com/DISCORD)
-- [👌 𝕏 (Twitter)](https://twitter.com/leifermendez)
+## Estructura del Proyecto
+
+* **src/app.ts**: Archivo principal del bot, define los flujos de conversación.
+* **src/flows**: Contiene los flujos de conversación individuales (por ejemplo, Welcome.ts, SalesRegister.ts).
+* **src/scripts/gemini.ts**: Maneja la integración con Google Gemini.
+* **src/prompts/PromptVentasC.** txt: Contiene el prompt inicial para Google Gemini.
+
+## Contribuciones
+
+Las contribuciones son bienvenidas. Por favor, abre un issue o envía un pull request con tus cambios.
+
+Please adhere to this project's `code of conduct`.
